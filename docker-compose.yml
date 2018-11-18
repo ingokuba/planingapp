@@ -1,0 +1,22 @@
+version: '3'
+services:
+  planingdb:
+    image: planingdb
+    container_name: planingdb
+    build:
+      context: .
+      dockerfile: .docker/mysql/Dockerfile
+    ports:
+    - 13306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+  planingapp:
+    image: planingapp
+    container_name: planingapp
+    build:
+      context: .
+      dockerfile: .docker/php/Dockerfile
+    ports:
+    - 8080:80
+    volumes:
+    - .:/srv/app
