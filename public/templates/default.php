@@ -11,8 +11,10 @@
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet"
+	href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
 </head>
-<body class="container jumbotron vertical-center text-center">
+<body class="container jumbotron vertical-center">
   	<?php echo $body;?>
 </body>
 </html>
