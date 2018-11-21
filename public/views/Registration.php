@@ -43,6 +43,10 @@ class Registration extends Page
             $user->setPassword($this->getPostData('password', 'Password'));
             // store user:
             $this->error = $user->store(false);
+            if (empty($this->error)) {
+                // login user to the session and switch to start page
+                $this->error = $user->login();
+            }
         }
     }
 
