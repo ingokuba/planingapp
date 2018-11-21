@@ -40,7 +40,7 @@ class Page implements IPage
         if ($this->body == null) {
             // image source: https://images.mentalfloss.com/sites/default/files/styles/mf_image_16x9/public/345eyrhfj.png?itok=35gvnyvU&resize=1100x1100
             $this->body = "$loginBlock
-                            <img src='templates/pokerdogs.png' class='img-fluid row mt-2 mb-3' alt='image not found'>
+                            <img src='resources/pokerdogs.png' class='img-fluid row mt-2 mb-3' alt='image not found'>
                             <h1 class='text-center'>Cost estimation game for software projects.</h1>";
         }
         return $this->body;
@@ -70,7 +70,7 @@ class Page implements IPage
         $body = $this->getBody();
 
         ob_start();
-        require 'templates/default.php';
+        require 'resources/templates/default.php';
         $html = ob_get_contents();
         ob_end_clean();
 
