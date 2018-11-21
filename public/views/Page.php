@@ -25,8 +25,9 @@ class Page implements IPage
     {
         if ($this->body == null) {
             // image source: https://images.mentalfloss.com/sites/default/files/styles/mf_image_16x9/public/345eyrhfj.png?itok=35gvnyvU&resize=1100x1100
-            $this->body = "<img src='templates/pokerdogs.png' class='img-fluid' alt='image not found'>
-                            <h1 class='mt-4'>Cost estimation game for software projects.</h1>";
+            $this->body = "<button class='btn btn-lg mb-1' data-toggle='tooltip' title='Login' onclick='window.location=\"Registration\";'><i class='fas fa-user-lock'></i></button>
+                            <img src='templates/pokerdogs.png' class='img-fluid' alt='image not found'>
+                            <h1 class='mt-4 text-center'>Cost estimation game for software projects.</h1>";
         }
         return $this->body;
     }
