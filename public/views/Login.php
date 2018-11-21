@@ -1,6 +1,6 @@
 <?php
 
-class Registration extends Page
+class Login extends Page
 {
 
     private $error = "";
@@ -11,11 +11,7 @@ class Registration extends Page
         $this->handlePost();
         $this->body = "<form method='post'
 		style='max-width: 330px; margin: auto;'>
-		<h3 class='mb-3 font-weight-normal form-text'>Registration</h3>
-			<div class='form-group row'>
-				<input id='givenName' class='form-control col-sm-6' placeholder='First name' required='required' name='givenName'>
-				<input id='surname' class='form-control col-sm-6' placeholder='Last name' required='required' name='surname'>
-			</div>
+		<h3 class='mb-3 font-weight-normal form-text'>Login</h3>
 			<div class='form-group row'>
 				<input id='email' class='form-control col-sm'
 					placeholder='Email' type='email' required='required' name='email'>
@@ -25,8 +21,8 @@ class Registration extends Page
 					placeholder='Password' type='password' required='required' name='password'>
 			</div>
 			<button id='registerButton' class='btn btn-lg btn-primary btn-block'
-				type='submit'>Submit</button>
-            <div class='text-primary text-center mt-2'><a href='Login'>Already have an account?</a></div>
+				type='submit'>Login</button>
+            <div class='text-primary text-center mt-2'><a href='Registration'>New? Create an account.</a></div>
             <div class='row text-danger mt-2'>$this->error</div>
 	     </form>";
         return parent::output();
@@ -37,12 +33,10 @@ class Registration extends Page
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $user = new User($this->model);
             // get user credentials from post request:
-            $user->setGivenname($this->getPostData('givenName', 'First name'));
-            $user->setSurname($this->getPostData('surname', 'Last name'));
             $user->setEmail($this->getPostData('email', 'Email'));
             $user->setPassword($this->getPostData('password', 'Password'));
-            // store user:
-            $this->error = $user->store(false);
+            // login user:
+            $this->error = $user->login();
         }
     }
 
