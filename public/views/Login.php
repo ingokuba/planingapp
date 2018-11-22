@@ -7,7 +7,7 @@ class Login extends Page
 
     public function output(): string
     {
-        $this->logout();
+        User::logout();
         $this->handlePost();
         $this->body = "<form method='post'
 		style='max-width: 330px; margin: auto;'>
@@ -28,40 +28,22 @@ class Login extends Page
         return parent::output();
     }
 
+    /**
+     * Login the user with the entered credentials.
+     */
     private function handlePost()
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $user = new User($this->model);
             // get user credentials from post request:
-            $user->setEmail($this->getPostData('email', 'Email'));
-            $user->setPassword($this->getPostData('password', 'Password'));
+            foreach (array(
+                User::$EMAIL,
+                User::$PASSWORD
+            ) as $attr) {
+                $user->setValue($attr, PlaningController::getPostData($attr));
+            }
             // login user:
             $this->error = $user->login();
         }
-    }
-
-    /**
-     * Get data from the POST request.
-     */
-    private function getPostData($id, $displayName): string
-    {
-        $data = $_POST[$id];
-        if (! isset($data)) {
-            $this->error .= "$displayName is missing. ";
-        } else {
-            $value = $this->trim_input($data);
-            if (empty($value)) {
-                $this->error .= "$displayName is missing. ";
-            }
-            return $value;
-        }
-        return "";
-    }
-
-    private function trim_input($data): string
-    {
-        $data = trim($data);
-        $data = stripslashes($data);
-        return htmlspecialchars($data);
     }
 }
