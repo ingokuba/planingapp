@@ -7,7 +7,7 @@ class Registration extends Page
 
     public function output(): string
     {
-        $this->logout();
+        User::logout();
         $this->handlePost();
         $this->body = "<form method='post'
 		style='max-width: 330px; margin: auto;'>
@@ -32,46 +32,32 @@ class Registration extends Page
         return parent::output();
     }
 
+    /**
+     * Register the new user with the entered credentials.
+     */
     private function handlePost()
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $user = new User($this->model);
             // get user credentials from post request:
-            $user->setGivenname($this->getPostData('givenName', 'First name'));
-            $user->setSurname($this->getPostData('surname', 'Last name'));
-            $user->setEmail($this->getPostData('email', 'Email'));
-            $user->setPassword($this->getPostData('password', 'Password'));
+            foreach (array(
+                User::$GIVENNAME,
+                User::$SURNAME,
+                User::$EMAIL,
+                User::$PASSWORD
+            ) as $attribute) {
+                $user->setValue($attribute, PlaningController::getPostData($attribute));
+            }
             // store user:
-            $this->error = $user->store(false);
+            try {
+                $this->error = $user->store(false);
+            } catch (Exception $e) {
+                $this->error = $e->getMessage();
+            }
             if (empty($this->error)) {
-                // login user to the session and switch to start page
+                // login user to the session
                 $this->error = $user->login();
             }
         }
-    }
-
-    /**
-     * Get data from the POST request.
-     */
-    private function getPostData($id, $displayName): string
-    {
-        $data = $_POST[$id];
-        if (! isset($data)) {
-            $this->error .= "$displayName is missing. ";
-        } else {
-            $value = $this->trim_input($data);
-            if (empty($value)) {
-                $this->error .= "$displayName is missing. ";
-            }
-            return $value;
-        }
-        return "";
-    }
-
-    private function trim_input($data): string
-    {
-        $data = trim($data);
-        $data = stripslashes($data);
-        return htmlspecialchars($data);
     }
 }

@@ -1,71 +1,63 @@
 <?php
 
-class User
+class User extends Entity
 {
 
-    public $USER = "User";
+    public static $USER = "User";
 
-    public $EMAIL = "email";
+    public static $GIVENNAME = "givenName";
 
-    private $model;
+    public static $SURNAME = "surname";
 
-    private $givenname;
+    public static $EMAIL = "email";
 
-    private $surname;
+    public static $PASSWORD = "password";
 
-    private $email;
+    public static $CREATED_AT = "createdAt";
 
-    private $password;
-
-    private $createdAt;
-
-    public function __construct(PlaningModel $model)
+    protected function initializeEntityType(): string
     {
-        $this->model = $model;
+        return User::$USER;
     }
 
-    /**
-     * Stores a user to the database.
-     *
-     * @param bool $override
-     *            Configure whether to update an existing user or not.
-     * @return string Error message.
-     */
-    public function store(bool $override): string
+    protected function initializeAttributes(): array
     {
-        $response = "";
-        $result = $this->model->select($this->USER, "*", $this->EMAIL, "'$this->email'");
-        // check if user already exists:
-        if ($result == null) {
-            if (! $this->isStorable()) {
-                $response = "User is missing attributes.";
-            } else {
-                // store new user:
-                $response = $this->model->insert($this->USER, "givenName, surname, email, password", "'$this->givenname', '$this->surname', '$this->email', '$this->password'");
-            }
-        } else if ($override) {
-            $id = $result["userID"];
-            // update existing user:
-            if (! $this->model->update($this->USER, "userID=$id", "givenName='$this->givenname', surname='$this->surname', email='$this->email', password='$this->password'")) {
-                $response = "Updating the user was not successful.";
-            }
-        } else {
-            $response = "The selected email is already in use.";
-        }
-        return $response;
+        return array(
+            User::$GIVENNAME,
+            User::$SURNAME,
+            User::$EMAIL,
+            User::$PASSWORD,
+            User::$CREATED_AT
+        );
     }
 
-    /**
-     * Checks if the user is missing any attributes.
-     *
-     * @return bool Whether this user is storable to the database.
-     */
-    private function isStorable(): bool
+    protected function checkConstraints()
     {
-        if (empty($this->givenname) || empty($this->surname) || empty($this->email) || empty($this->password)) {
-            return false;
+        $message = "";
+        // not nullable:
+        foreach (array(
+            User::$GIVENNAME,
+            User::$SURNAME,
+            User::$EMAIL,
+            User::$PASSWORD
+        ) as $attribute) {
+            if (empty($this->getValue($attribute))) {
+                $message .= "Attribute '$attribute' is not nullable. ";
+            }
         }
-        return true;
+        // email must be unique:
+        $email = $this->getValue(User::$EMAIL);
+        $result = $this->model->select(User::$USER, "*", User::$EMAIL, "'$email'");
+        if ($result != null) {
+            $message .= "Email must be unique. ";
+        }
+        $createdAt = $this->getValue(User::$CREATED_AT);
+        if (! empty($createdAt)) {
+            $message .= "Attribute 'createdAt' should not be set for storing.!";
+        }
+        if (! empty($message)) {
+            throw new InvalidArgumentException($message);
+        }
     }
 
     /**
@@ -75,10 +67,15 @@ class User
      */
     public function login(): string
     {
-        $result = $this->model->select($this->USER, "*", "$this->EMAIL", "'$this->email'");
-        if ($result != null && $result["password"] == $this->password) {
+        $email = $this->getValue(User::$EMAIL);
+        $password = $this->getValue(User::$PASSWORD);
+        if (empty($email) || empty($password)) {
+            return "Please enter your credentials.";
+        }
+        $result = $this->model->select(User::$USER, "*", User::$EMAIL, "'$email'");
+        if ($result != null && $result["password"] == $password) {
             // Cookie lifespan: 30 minutes
-            setcookie($this->USER, "$this->email", time() + 1800, "/");
+            setcookie(User::$USER, "$email", time() + 1800, "/");
             header("Location: /");
             return "";
         }
@@ -86,79 +83,41 @@ class User
     }
 
     /**
-     * Logout the user in the session.
+     * Logout the user from the session.
      */
-    public function logout()
+    public static function logout()
     {
-        $cookie = $_COOKIE[$this->USER];
+        $cookie = $_COOKIE[User::$USER];
         if (isset($cookie)) {
-            setcookie($this->USER, '', time() - 1000);
+            setcookie(User::$USER, '', time() - 1000);
         }
     }
 
-    public function getUserFromSession()
+    /**
+     * Returns the user found with the email in the session cookie.
+     *
+     * @param PlaningModel $model
+     *            Model needed for the database connection.
+     * @return NULL|User Logged in user or null when user is not logged in or was deleted.
+     *        
+     */
+    public static function getUserFromSession(PlaningModel $model)
     {
-        $this->email = $this->getCookieValue($this->USER); // get from cookie
-        if (empty($this->email)) {
+        $user = new User($model);
+        // get email from cookie:
+        $email = PlaningController::getCookieValue(User::$USER);
+        if (empty($email)) {
             return null;
         }
-        $result = $this->model->select($this->USER, "*", $this->EMAIL, "'$this->email'");
+        $result = $model->select(User::$USER, "*", User::$EMAIL, "'$email'");
         if ($result != null) {
-            $this->givenname = $result["givenName"];
-            $this->surname = $result["surname"];
-            $this->createdAt = $result["createdAt"];
-            return $this;
+            $user->setValue(User::$EMAIL, $email);
+            $user->setValue(User::$GIVENNAME, $result[User::$GIVENNAME]);
+            $user->setValue(User::$SURNAME, $result[User::$SURNAME]);
+            $user->setValue(User::$CREATED_AT, $result[User::$CREATED_AT]);
+            return $user;
         }
         // User not found.
         return null;
-    }
-
-    private function getCookieValue(string $name): string
-    {
-        $cookie = $_COOKIE[$name];
-        if (isset($cookie)) {
-            return $cookie;
-        }
-        return "";
-    }
-
-    public function setGivenname(string $value)
-    {
-        $this->givenname = $value;
-    }
-
-    public function getGivenname(): string
-    {
-        return $this->givenname;
-    }
-
-    public function setSurname(string $value)
-    {
-        $this->surname = $value;
-    }
-
-    public function getSurname()
-    {
-        return $this->surname;
-    }
-
-    public function setEmail(string $value)
-    {
-        $this->email = $value;
-    }
-
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    public function setPassword(string $value)
-    {
-        $this->password = $value;
     }
 }
