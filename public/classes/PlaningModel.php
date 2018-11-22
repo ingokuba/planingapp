@@ -8,8 +8,6 @@ class PlaningModel
     function __construct()
     {
         $this->link = mysqli_connect("planingdb", "root", "password", "planingdb");
-
-        mysqli_set_charset($this->link, "utf8");
     }
 
     /**
@@ -57,14 +55,12 @@ class PlaningModel
      *            Name of the table.
      * @param string $select
      *            Variables that should be stored in the return array.
-     * @param string $var
-     *            Id of the column to search.
-     * @param string $value
-     *            Value of the variable.
+     * @param string $query
+     *            The query that should be executed. (e.g. "id=1")
      */
-    public function select(string $table, string $select, string $var, string $value)
+    public function select(string $table, string $select, string $query)
     {
-        $query = "SELECT $select FROM $table WHERE $var=$value";
+        $query = "SELECT $select FROM $table WHERE $query";
         $result = $this->link->query($query);
         if ($result->num_rows > 0) {
             return $result->fetch_assoc();
