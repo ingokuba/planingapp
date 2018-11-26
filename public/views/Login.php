@@ -5,11 +5,11 @@ class Login extends Page
 
     private $error = "";
 
-    public function output(): string
+    protected function getBody(): string
     {
         User::logout();
         $this->handlePost();
-        $this->body = "<form method='post'
+        return "<form method='post'
 		style='max-width: 330px; margin: auto;'>
 		<h3 class='mb-3 font-weight-normal form-text'>Login</h3>
 			<div class='form-group row'>
@@ -25,7 +25,6 @@ class Login extends Page
             <div class='text-primary text-center mt-2'><a href='Registration'>New? Create an account.</a></div>
             <div class='row text-danger mt-2'>$this->error</div>
 	     </form>";
-        return parent::output();
     }
 
     /**

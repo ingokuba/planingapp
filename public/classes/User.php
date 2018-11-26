@@ -3,6 +3,11 @@
 class User extends Entity
 {
 
+    /**
+     * Entity type 'User'.
+     *
+     * @var string
+     */
     public static $USER = "User";
 
     public static $GIVENNAME = "givenName";
@@ -31,23 +36,17 @@ class User extends Entity
         );
     }
 
-    protected function checkConstraints()
+    protected function checkConstraints(): string
     {
-        $message = "";
-        // not nullable:
-        foreach (array(
+        $message = $this->isEmpty(array(
             User::$GIVENNAME,
             User::$SURNAME,
             User::$EMAIL,
             User::$PASSWORD
-        ) as $attribute) {
-            if (empty($this->getValue($attribute))) {
-                $message .= "Attribute '$attribute' is not nullable. ";
-            }
-        }
+        ));
         // email must be unique:
         $email = $this->getValue(User::$EMAIL);
-        $result = $this->model->select(User::$USER, "*", User::$EMAIL, "'$email'");
+        $result = $this->model->select(User::$USER, "*", User::$EMAIL . "='$email'");
         if ($result != null) {
             $message .= "Email must be unique. ";
         }
@@ -55,9 +54,7 @@ class User extends Entity
         if (! empty($createdAt)) {
             $message .= "Attribute 'createdAt' should not be set for storing.!";
         }
-        if (! empty($message)) {
-            throw new InvalidArgumentException($message);
-        }
+        return $message;
     }
 
     /**
@@ -72,8 +69,8 @@ class User extends Entity
         if (empty($email) || empty($password)) {
             return "Please enter your credentials.";
         }
-        $result = $this->model->select(User::$USER, "*", User::$EMAIL, "'$email'");
-        if ($result != null && $result["password"] == $password) {
+        $result = $this->model->select(User::$USER, "*", User::$EMAIL . "='$email'");
+        if ($result != null && $result[User::$PASSWORD] == $password) {
             // Cookie lifespan: 30 minutes
             setcookie(User::$USER, "$email", time() + 1800, "/");
             header("Location: /");
@@ -109,8 +106,9 @@ class User extends Entity
         if (empty($email)) {
             return null;
         }
-        $result = $model->select(User::$USER, "*", User::$EMAIL, "'$email'");
+        $result = $model->select(User::$USER, "*", User::$EMAIL . "='$email'");
         if ($result != null) {
+            $user->setValue($user->ID, $result[$user->ID]);
             $user->setValue(User::$EMAIL, $email);
             $user->setValue(User::$GIVENNAME, $result[User::$GIVENNAME]);
             $user->setValue(User::$SURNAME, $result[User::$SURNAME]);

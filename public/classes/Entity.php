@@ -27,11 +27,14 @@ abstract class Entity
 
     protected $model;
 
+    public $ID = "id";
+
     public final function __construct(PlaningModel $model)
     {
         $this->model = $model;
         $this->entityType = $this->initializeEntityType();
         $this->attributeNames = $this->initializeAttributes();
+        array_push($this->attributeNames, $this->ID);
         $this->attributes = array(
             $this->attributeNames
         );
@@ -55,9 +58,10 @@ abstract class Entity
 
     /**
      * Implement this function to create constraints on attributes.
-     * Throw exceptions for constraints.
+     *
+     * @return string Error message or empty string if no constraint was matched.
      */
-    protected abstract function checkConstraints();
+    protected abstract function checkConstraints(): string;
 
     public function getValue(string $attr)
     {
@@ -78,7 +82,10 @@ abstract class Entity
      */
     public function store(): string
     {
-        $this->checkConstraints();
+        $message = $this->checkConstraints();
+        if (! empty($message)) {
+            throw new InvalidArgumentException($message);
+        }
         $attrNames = "";
         $insertQuery = "";
         foreach ($this->attributeNames as $attribute) {
@@ -100,7 +107,10 @@ abstract class Entity
         // remove last comma:
         $attrNames = rtrim(trim($attrNames), ',');
         $insertQuery = rtrim(trim($insertQuery), ',');
-        return $this->model->insert($this->entityType, $attrNames, $insertQuery);
+        $message = $this->model->insert($this->entityType, $attrNames, $insertQuery);
+        // set id of inserted entity.
+        $this->setValue($this->ID, $this->model->insert_id);
+        return $message;
     }
 
     /**
@@ -114,5 +124,24 @@ abstract class Entity
         if (! in_array($attr, $this->attributeNames)) {
             throw new BadFunctionCallException("Attribute '$attr' doesn't exist for the entity type '$this->entityType'.");
         }
+    }
+
+    /**
+     * Checks if one or more of the attributes are empty.
+     *
+     * @param array $attributes
+     *            Names of the attributes.
+     * @return Error message if some are empty.
+     */
+    public final function isEmpty(array $attributes): string
+    {
+        $message = "";
+        // not nullable:
+        foreach ($attributes as $attribute) {
+            if (empty($this->getValue($attribute))) {
+                $message .= "Attribute '$attribute' is not nullable. ";
+            }
+        }
+        return $message;
     }
 }
