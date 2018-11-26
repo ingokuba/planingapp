@@ -27,11 +27,14 @@ abstract class Entity
 
     protected $model;
 
+    public $ID = "id";
+
     public final function __construct(PlaningModel $model)
     {
         $this->model = $model;
         $this->entityType = $this->initializeEntityType();
         $this->attributeNames = $this->initializeAttributes();
+        array_push($this->attributeNames, $this->ID);
         $this->attributes = array(
             $this->attributeNames
         );
@@ -104,7 +107,10 @@ abstract class Entity
         // remove last comma:
         $attrNames = rtrim(trim($attrNames), ',');
         $insertQuery = rtrim(trim($insertQuery), ',');
-        return $this->model->insert($this->entityType, $attrNames, $insertQuery);
+        $message = $this->model->insert($this->entityType, $attrNames, $insertQuery);
+        // set id of inserted entity.
+        $this->setValue($this->ID, $this->model->insert_id);
+        return $message;
     }
 
     /**

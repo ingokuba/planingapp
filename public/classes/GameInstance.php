@@ -10,8 +10,6 @@ class GameInstance extends Entity
 
     public static $GAME_INSTANCE = "GameInstance";
 
-    public static $ID = "id";
-
     public static $USER_ID = "userID";
 
     public static $GAME_ID = "gameID";
@@ -44,12 +42,13 @@ class GameInstance extends Entity
         if ($existingInstance != null) {
             $message .= "A link from User $userID to Game $gameID already exists. ";
         }
-        $game = $this->model->select(Game::$GAME, "*", Game::$ID . "=" . $gameID);
+        $game = new Game($this->model);
+        $game = $this->model->select(Game::$GAME, "*", $game->ID . "=" . $gameID);
         if ($game == null) {
             $message .= "Game $gameID not found. ";
         } else {
             $maxParticipants = $game[Game::$MAX_PARTICIPANTS];
-            $instances = $this->model->select(GameInstance::$GAME_INSTANCE, "*", GameInstance::$GAME_ID . "=".$gameID);
+            $instances = $this->model->select(GameInstance::$GAME_INSTANCE, "*", GameInstance::$GAME_ID . "=" . $gameID);
             if ($instances != null && count($instances) >= $maxParticipants) {
                 $message .= "Game $gameID already has maximum amount of participants. ";
             }

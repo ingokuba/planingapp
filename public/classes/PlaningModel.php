@@ -5,6 +5,13 @@ class PlaningModel
 
     private $link;
 
+    /**
+     * Id of the last insert.
+     *
+     * @var integer
+     */
+    public $insert_id;
+
     function __construct()
     {
         $this->link = mysqli_connect("planingdb", "root", "password", "planingdb");
@@ -25,6 +32,7 @@ class PlaningModel
     {
         $query = "INSERT INTO $table ($ids) VALUES ($values)";
         if ($this->link->query($query)) {
+            $this->insert_id = mysqli_insert_id($this->link);
             return "";
         }
         return $this->link->error;
@@ -49,7 +57,7 @@ class PlaningModel
     }
 
     /**
-     * Search entry in the database
+     * Search unique entry in the database.
      *
      * @param string $table
      *            Name of the table.
@@ -57,15 +65,27 @@ class PlaningModel
      *            Variables that should be stored in the return array.
      * @param string $query
      *            The query that should be executed. (e.g. "id=1")
+     * @return mysqli_result Only the first entry is returned.
      */
     public function select(string $table, string $select, string $query)
     {
         $query = "SELECT $select FROM $table WHERE $query";
-        $result = $this->link->query($query);
+        $result = $this->query($query);
         if ($result->num_rows > 0) {
             return $result->fetch_assoc();
         } else {
             return null;
         }
+    }
+
+    /**
+     * Execute a sql query on the database.
+     *
+     * @param string $query
+     *            Query to execute.
+     */
+    public function query(string $query)
+    {
+        return $this->link->query($query);
     }
 }

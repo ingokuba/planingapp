@@ -10,8 +10,6 @@ class User extends Entity
      */
     public static $USER = "User";
 
-    public static $ID = "id";
-
     public static $GIVENNAME = "givenName";
 
     public static $SURNAME = "surname";
@@ -72,7 +70,7 @@ class User extends Entity
             return "Please enter your credentials.";
         }
         $result = $this->model->select(User::$USER, "*", User::$EMAIL . "='$email'");
-        if ($result != null && $result["password"] == $password) {
+        if ($result != null && $result[User::$PASSWORD] == $password) {
             // Cookie lifespan: 30 minutes
             setcookie(User::$USER, "$email", time() + 1800, "/");
             header("Location: /");
@@ -110,6 +108,7 @@ class User extends Entity
         }
         $result = $model->select(User::$USER, "*", User::$EMAIL . "='$email'");
         if ($result != null) {
+            $user->setValue($user->ID, $result[$user->ID]);
             $user->setValue(User::$EMAIL, $email);
             $user->setValue(User::$GIVENNAME, $result[User::$GIVENNAME]);
             $user->setValue(User::$SURNAME, $result[User::$SURNAME]);

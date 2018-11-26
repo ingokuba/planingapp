@@ -5,8 +5,6 @@ class Game extends Entity
 
     public static $GAME = "Game";
 
-    public static $ID = "id";
-
     public static $DESCRIPTION = "description";
 
     public static $MAX_PARTICIPANTS = "maxParticipants";

@@ -11,7 +11,6 @@ $model = new PlaningModel();
 
 $controller = new PlaningController($model);
 
-require "views/IPage.php";
 require "views/Page.php";
 
 // get page from request parameter and check if it exists:
