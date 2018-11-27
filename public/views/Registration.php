@@ -37,7 +37,7 @@ class Registration extends Page
     private function handlePost()
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $user = new User($this->model);
+            $user = new User($this->database);
             // get user credentials from post request:
             foreach (array(
                 User::$GIVENNAME,
@@ -45,7 +45,7 @@ class Registration extends Page
                 User::$EMAIL,
                 User::$PASSWORD
             ) as $attribute) {
-                $user->setValue($attribute, PlaningController::getPostData($attribute));
+                $user->setValue($attribute, Util::getPostData($attribute));
             }
             // store user:
             try {

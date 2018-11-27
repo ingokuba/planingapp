@@ -46,7 +46,7 @@ class User extends Entity
         ));
         // email must be unique:
         $email = $this->getValue(User::$EMAIL);
-        $result = $this->model->select(User::$USER, "*", User::$EMAIL . "='$email'");
+        $result = $this->database->select(User::$USER, "*", User::$EMAIL . "='$email'");
         if ($result != null) {
             $message .= "Email must be unique. ";
         }
@@ -69,7 +69,7 @@ class User extends Entity
         if (empty($email) || empty($password)) {
             return "Please enter your credentials.";
         }
-        $result = $this->model->select(User::$USER, "*", User::$EMAIL . "='$email'");
+        $result = $this->database->select(User::$USER, "*", User::$EMAIL . "='$email'");
         if ($result != null && $result[User::$PASSWORD] == $password) {
             // Cookie lifespan: 30 minutes
             setcookie(User::$USER, "$email", time() + 1800, "/");
@@ -93,20 +93,20 @@ class User extends Entity
     /**
      * Returns the user found with the email in the session cookie.
      *
-     * @param PlaningModel $model
-     *            Model needed for the database connection.
+     * @param Database $database
+     *            Needed for the database connection.
      * @return NULL|User Logged in user or null when user is not logged in or was deleted.
      *        
      */
-    public static function getUserFromSession(PlaningModel $model)
+    public static function getUserFromSession(Database $database)
     {
-        $user = new User($model);
+        $user = new User($database);
         // get email from cookie:
-        $email = PlaningController::getCookieValue(User::$USER);
+        $email = Util::getCookieValue(User::$USER);
         if (empty($email)) {
             return null;
         }
-        $result = $model->select(User::$USER, "*", User::$EMAIL . "='$email'");
+        $result = $database->select(User::$USER, "*", User::$EMAIL . "='$email'");
         if ($result != null) {
             $user->setValue($user->ID, $result[$user->ID]);
             $user->setValue(User::$EMAIL, $email);

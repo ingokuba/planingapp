@@ -1,6 +1,6 @@
 <?php
 
-class PlaningModel
+class Database
 {
 
     private $link;
@@ -76,6 +76,19 @@ class PlaningModel
         } else {
             return null;
         }
+    }
+
+    public function count(string $table, string $select, string $query): int
+    {
+        $query = "SELECT $select FROM $table WHERE $query";
+        $result = $this->query($query);
+        $i = 0;
+        if ($result->num_rows > 0) {
+            while ($result->fetch_assoc()) {
+                $i ++;
+            }
+        }
+        return $i;
     }
 
     /**

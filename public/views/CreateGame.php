@@ -31,13 +31,13 @@ class CreateGame extends Welcome
     private function handlePost()
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $game = new Game($this->model);
+            $game = new Game($this->database);
             // get game data from post request:
             foreach (array(
                 Game::$DESCRIPTION,
                 Game::$MAX_PARTICIPANTS
             ) as $attribute) {
-                $game->setValue($attribute, PlaningController::getPostData($attribute));
+                $game->setValue($attribute, Util::getPostData($attribute));
             }
             // store game:
             try {
@@ -47,7 +47,7 @@ class CreateGame extends Welcome
                 return;
             }
             // create game instance aswell:
-            $instance = new GameInstance($this->model);
+            $instance = new GameInstance($this->database);
             $instance->setValue(GameInstance::$GAME_ID, $game->getValue($game->ID));
             $instance->setValue(GameInstance::$USER_ID, $this->user->getValue($this->user->ID));
             // store instance:
@@ -55,6 +55,9 @@ class CreateGame extends Welcome
                 $this->error .= $instance->store();
             } catch (Exception $e) {
                 $this->error .= $e->getMessage();
+            }
+            if (empty($this->error)) {
+                header("Location: Welcome");
             }
         }
     }

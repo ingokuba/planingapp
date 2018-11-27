@@ -38,18 +38,18 @@ class GameInstance extends Entity
         ));
         $userID = $this->getValue(GameInstance::$USER_ID);
         $gameID = $this->getValue(GameInstance::$GAME_ID);
-        $existingInstance = $this->model->select(GameInstance::$GAME_INSTANCE, "*", GameInstance::$GAME_ID . "=" . $gameID . " AND " . GameInstance::$USER_ID . "=" . $userID);
+        $existingInstance = $this->database->select(GameInstance::$GAME_INSTANCE, "*", GameInstance::$GAME_ID . "=" . $gameID . " AND " . GameInstance::$USER_ID . "=" . $userID);
         if ($existingInstance != null) {
             $message .= "A link from User $userID to Game $gameID already exists. ";
         }
-        $game = new Game($this->model);
-        $game = $this->model->select(Game::$GAME, "*", $game->ID . "=" . $gameID);
+        $game = new Game($this->database);
+        $game = $this->database->select(Game::$GAME, "*", $game->ID . "=" . $gameID);
         if ($game == null) {
             $message .= "Game $gameID not found. ";
         } else {
             $maxParticipants = $game[Game::$MAX_PARTICIPANTS];
-            $instances = $this->model->select(GameInstance::$GAME_INSTANCE, "*", GameInstance::$GAME_ID . "=" . $gameID);
-            if ($instances != null && count($instances) >= $maxParticipants) {
+            $instanceCount = $this->database->count(GameInstance::$GAME_INSTANCE, "*", GameInstance::$GAME_ID . "=" . $gameID);
+            if ($instanceCount >= (int) $maxParticipants) {
                 $message .= "Game $gameID already has maximum amount of participants. ";
             }
         }

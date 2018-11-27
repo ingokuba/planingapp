@@ -9,18 +9,16 @@
 class Page
 {
 
-    protected $model;
+    protected $database;
 
-    protected $controller;
 
     public $user;
 
-    public function __construct(PlaningController $controller, PlaningModel $model)
+    public function __construct(Database $database)
     {
-        $this->controller = $controller;
-        $this->model = $model;
+        $this->database = $database;
         // initialize user:
-        $this->user = User::getUserFromSession($this->model);
+        $this->user = User::getUserFromSession($this->database);
     }
 
     /**
@@ -41,7 +39,7 @@ class Page
                 <h1 class='text-center'>Cost estimation game for software projects.</h1>";
     }
 
-    public final function output(): string
+    public function output(): string
     {
         $body = $this->getBody();
 

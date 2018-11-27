@@ -7,9 +7,7 @@ function autoload($className)
 }
 spl_autoload_register("autoload");
 
-$model = new PlaningModel();
-
-$controller = new PlaningController($model);
+$database = new Database();
 
 require "views/Page.php";
 
@@ -24,5 +22,5 @@ if ($page == "" || ! file_exists("views/$page.php")) {
     require "views/$page.php";
 }
 // display view:
-$view = new $page($controller, $model);
+$view = new $page($database);
 echo $view->output();

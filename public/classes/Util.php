@@ -1,13 +1,13 @@
 <?php
 
-class PlaningController
+class Util
 {
 
-    private $model;
+    private $database;
 
-    public function __construct(PlaningModel $model)
+    public function __construct(Database $database)
     {
-        $this->model = $model;
+        $this->database = $database;
     }
 
     /**
@@ -21,7 +21,7 @@ class PlaningController
     {
         $cookie = $_COOKIE[$name];
         if (isset($cookie)) {
-            return PlaningController::trim($cookie);
+            return Util::trim($cookie);
         }
         return "";
     }
@@ -35,7 +35,7 @@ class PlaningController
     {
         $data = $_POST[$id];
         if (isset($data)) {
-            return PlaningController::trim($data);
+            return Util::trim($data);
         }
         return "";
     }

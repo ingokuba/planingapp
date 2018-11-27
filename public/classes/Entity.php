@@ -25,13 +25,13 @@ abstract class Entity
      */
     private $attributeNames;
 
-    protected $model;
+    protected $database;
 
     public $ID = "id";
 
-    public final function __construct(PlaningModel $model)
+    public final function __construct(Database $database)
     {
-        $this->model = $model;
+        $this->database = $database;
         $this->entityType = $this->initializeEntityType();
         $this->attributeNames = $this->initializeAttributes();
         array_push($this->attributeNames, $this->ID);
@@ -107,9 +107,9 @@ abstract class Entity
         // remove last comma:
         $attrNames = rtrim(trim($attrNames), ',');
         $insertQuery = rtrim(trim($insertQuery), ',');
-        $message = $this->model->insert($this->entityType, $attrNames, $insertQuery);
+        $message = $this->database->insert($this->entityType, $attrNames, $insertQuery);
         // set id of inserted entity.
-        $this->setValue($this->ID, $this->model->insert_id);
+        $this->setValue($this->ID, $this->database->insert_id);
         return $message;
     }
 
