@@ -16,6 +16,8 @@ class GameInstance extends Entity
 
     public static $CREATED_AT = "createdAt";
 
+    public static $PLAYED_VALUE = "playedValue";
+
     protected function initializeEntityType(): string
     {
         return GameInstance::$GAME_INSTANCE;
@@ -26,6 +28,7 @@ class GameInstance extends Entity
         return array(
             GameInstance::$USER_ID,
             GameInstance::$GAME_ID,
+            GameInstance::$PLAYED_VALUE,
             GameInstance::$CREATED_AT
         );
     }
@@ -38,6 +41,11 @@ class GameInstance extends Entity
         ));
         $userID = $this->getValue(GameInstance::$USER_ID);
         $gameID = $this->getValue(GameInstance::$GAME_ID);
+        $playedValue = $this->getValue(GameInstance::$PLAYED_VALUE);
+        if (! ($playedValue == null || in_array($playedValue, Util::$CARDS))) {
+            // can be null or a valid card
+            $message .= "Value '$playedValue' is not a valid Card. ";
+        }
         $existingInstance = $this->database->select(GameInstance::$GAME_INSTANCE, "*", GameInstance::$GAME_ID . "=" . $gameID . " AND " . GameInstance::$USER_ID . "=" . $userID);
         if ($existingInstance != null) {
             $message .= "A link from User $userID to Game $gameID already exists. ";

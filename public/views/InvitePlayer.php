@@ -11,7 +11,7 @@ class InvitePlayer extends Page
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $email = Util::getPostData(User::$EMAIL);
             $gameID = Util::getPostData(GameInstance::$GAME_ID);
-            if (! empty($email) && ! empty($gameID)) {
+            if ($email != null && $gameID != null) {
                 return $this->handlePost($email, $gameID);
             }
         }

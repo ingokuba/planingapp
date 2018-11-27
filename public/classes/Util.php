@@ -3,11 +3,30 @@
 class Util
 {
 
-    private $database;
+    /**
+     * Valid cards for the game.
+     *
+     * @var array
+     */
+    public static $CARDS = array(
+        0,
+        0.5,
+        1,
+        2,
+        3,
+        5,
+        8,
+        13,
+        20,
+        40,
+        100,
+        '?',
+        'Coffee'
+    );
 
-    public function __construct(Database $database)
+    public function __construct()
     {
-        $this->database = $database;
+        throw new BadFunctionCallException("This utility class cannot be instanciated.");
     }
 
     /**
@@ -29,15 +48,15 @@ class Util
     /**
      * Get data from the POST request.
      *
-     * @return string Trimmed value from the post request or empty string if not found.
+     * @return mixed Trimmed value from the post request or null if not found.
      */
-    public static function getPostData($id): string
+    public static function getPostData($id)
     {
         $data = $_POST[$id];
         if (isset($data)) {
             return Util::trim($data);
         }
-        return "";
+        return null;
     }
 
     /**
