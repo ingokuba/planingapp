@@ -66,18 +66,37 @@ class Database
      * @param string $query
      *            The query that should be executed. (e.g. "id=1")
      * @return mysqli_result Only the first entry is returned.
+     * @throws BadFunctionCallException if result is not unique.
      */
     public function select(string $table, string $select, string $query)
     {
-        $query = "SELECT $select FROM $table WHERE $query";
-        $result = $this->query($query);
-        if ($result->num_rows > 0) {
+        $result = $this->multiSelect($table, $select, $query);
+        if ($result->num_rows == 1) {
             return $result->fetch_assoc();
         } else {
-            return null;
+            if ($result->num_rows == 0) {
+                return null;
+            }
+            throw new BadFunctionCallException("Result not unique.");
         }
     }
 
+    /**
+     * Search entries in the database.
+     *
+     * @return mysqli_result Result of the query.
+     */
+    public function multiSelect(string $table, string $select, string $query)
+    {
+        $query = "SELECT $select FROM $table WHERE $query";
+        return $this->query($query);
+    }
+
+    /**
+     * Count entries in the database.
+     *
+     * @return int Amount of entities found.
+     */
     public function count(string $table, string $select, string $query): int
     {
         $query = "SELECT $select FROM $table WHERE $query";

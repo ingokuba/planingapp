@@ -23,7 +23,7 @@ class Welcome extends Page
 		          </div>
 	            </nav>
                 <div class='row'>
-                    <button class='btn btn-lg mb-1' data-toggle='tooltip' title='Logout' onclick='document.cookie=\"User=; expires=new Date(); path=/;\";location.reload();'><i class='fas fa-sign-out-alt'></i></button>
+                    <button class='btn btn-lg mb-1' data-toggle='tooltip' title='Logout' onclick='document.cookie=\"User=; expires=new Date(); path=/;\";window.location=\"/\";'><i class='fas fa-sign-out-alt'></i></button>
                     <div class='ml-2 pt-3'>Welcome <b>$givenname $surname</b> (Member since $createdAt)</div>
                 </div>
                $this->view";
@@ -65,7 +65,7 @@ class Welcome extends Page
                 $gameID = $instance[GameInstance::$GAME_ID];
                 $game = $this->database->select(Game::$GAME, "*", "id=" . $gameID);
                 $createdAt = date("d.m.Y h:ia", $game[Game::$CREATED_AT]);
-                $result = $game[Game::$RESULT] == null ? "open" : $game[Game::$RESULT];
+                $result = $game[Game::$RESULT] == null ? "<form method='post' action='PlayGame'><input type='hidden' value='$gameID' name='id'/><button class='btn btn-primary' type='submit'>Play</button></form>" : $game[Game::$RESULT];
                 $action = $game[Game::$RESULT] == null ? "<button class='btn btn-success' 
                     onclick='promptPlayer($gameID)' data-toggle='tooltip' title='Invite'><i class='fas fa-plus-square'></i></button>" : "";
                 $this->view .= "<tr>
