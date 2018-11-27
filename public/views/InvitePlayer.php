@@ -25,16 +25,16 @@ class InvitePlayer extends Page
         if ($email == $this->user->getValue(User::$EMAIL)) {
             return "You cannot invite yourself";
         }
-        $user = $this->model->select(User::$USER, "*", User::$EMAIL . "='$email'");
+        $user = $this->database->select(User::$USER, "*", User::$EMAIL . "='$email'");
         if ($user == null) {
             return "User not found";
         }
         $userID = $user["id"];
-        $instance = $this->model->select(GameInstance::$GAME_INSTANCE, "*", GameInstance::$GAME_ID . "=$gameID AND " . GameInstance::$USER_ID . "=$userID");
+        $instance = $this->database->select(GameInstance::$GAME_INSTANCE, "*", GameInstance::$GAME_ID . "=$gameID AND " . GameInstance::$USER_ID . "=$userID");
         if ($instance != null) {
             return "User was already invited";
         }
-        $instance = new GameInstance($this->model);
+        $instance = new GameInstance($this->database);
         $instance->setValue(GameInstance::$GAME_ID, $gameID);
         $instance->setValue(GameInstance::$USER_ID, $userID);
         // store the new instance

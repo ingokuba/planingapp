@@ -60,10 +60,10 @@ class Welcome extends Page
                                <tr>
                             </thead>
                             <tbody>";
-            $instances = $this->model->query("SELECT * FROM " . GameInstance::$GAME_INSTANCE . " WHERE " . GameInstance::$USER_ID . "=" . $this->user->getValue($this->user->ID));
+            $instances = $this->database->query("SELECT * FROM " . GameInstance::$GAME_INSTANCE . " WHERE " . GameInstance::$USER_ID . "=" . $this->user->getValue($this->user->ID));
             while ($instance = $instances->fetch_assoc()) {
                 $gameID = $instance[GameInstance::$GAME_ID];
-                $game = $this->model->select(Game::$GAME, "*", "id=" . $gameID);
+                $game = $this->database->select(Game::$GAME, "*", "id=" . $gameID);
                 $createdAt = date("d.m.Y h:ia", $game[Game::$CREATED_AT]);
                 $result = $game[Game::$RESULT] == null ? "open" : $game[Game::$RESULT];
                 $action = $game[Game::$RESULT] == null ? "<button class='btn btn-success' 

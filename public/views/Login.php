@@ -33,7 +33,7 @@ class Login extends Page
     private function handlePost()
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $user = new User($this->model);
+            $user = new User($this->database);
             // get user credentials from post request:
             foreach (array(
                 User::$EMAIL,

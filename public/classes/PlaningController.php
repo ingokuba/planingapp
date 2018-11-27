@@ -3,11 +3,11 @@
 class PlaningController
 {
 
-    private $model;
+    private $database;
 
-    public function __construct(PlaningModel $model)
+    public function __construct(Database $database)
     {
-        $this->model = $model;
+        $this->database = $database;
     }
 
     /**

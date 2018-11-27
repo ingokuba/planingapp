@@ -1,6 +1,6 @@
 <?php
 
-class PlaningModel
+class Database
 {
 
     private $link;
