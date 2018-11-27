@@ -48,8 +48,8 @@ class GameInstance extends Entity
             $message .= "Game $gameID not found. ";
         } else {
             $maxParticipants = $game[Game::$MAX_PARTICIPANTS];
-            $instances = $this->model->select(GameInstance::$GAME_INSTANCE, "*", GameInstance::$GAME_ID . "=" . $gameID);
-            if ($instances != null && count($instances) >= $maxParticipants) {
+            $instanceCount = $this->model->count(GameInstance::$GAME_INSTANCE, "*", GameInstance::$GAME_ID . "=" . $gameID);
+            if ($instanceCount >= (int) $maxParticipants) {
                 $message .= "Game $gameID already has maximum amount of participants. ";
             }
         }

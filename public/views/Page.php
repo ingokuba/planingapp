@@ -41,7 +41,7 @@ class Page
                 <h1 class='text-center'>Cost estimation game for software projects.</h1>";
     }
 
-    public final function output(): string
+    public function output(): string
     {
         $body = $this->getBody();
 

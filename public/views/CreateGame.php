@@ -56,6 +56,9 @@ class CreateGame extends Welcome
             } catch (Exception $e) {
                 $this->error .= $e->getMessage();
             }
+            if (empty($this->error)) {
+                header("Location: Welcome");
+            }
         }
     }
 }
