@@ -45,7 +45,7 @@ class Registration extends Page
                 User::$EMAIL,
                 User::$PASSWORD
             ) as $attribute) {
-                $user->setValue($attribute, PlaningController::getPostData($attribute));
+                $user->setValue($attribute, Util::getPostData($attribute));
             }
             // store user:
             try {

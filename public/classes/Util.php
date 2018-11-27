@@ -1,6 +1,6 @@
 <?php
 
-class PlaningController
+class Util
 {
 
     private $database;
@@ -21,7 +21,7 @@ class PlaningController
     {
         $cookie = $_COOKIE[$name];
         if (isset($cookie)) {
-            return PlaningController::trim($cookie);
+            return Util::trim($cookie);
         }
         return "";
     }
@@ -35,7 +35,7 @@ class PlaningController
     {
         $data = $_POST[$id];
         if (isset($data)) {
-            return PlaningController::trim($data);
+            return Util::trim($data);
         }
         return "";
     }

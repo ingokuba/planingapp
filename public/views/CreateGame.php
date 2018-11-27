@@ -37,7 +37,7 @@ class CreateGame extends Welcome
                 Game::$DESCRIPTION,
                 Game::$MAX_PARTICIPANTS
             ) as $attribute) {
-                $game->setValue($attribute, PlaningController::getPostData($attribute));
+                $game->setValue($attribute, Util::getPostData($attribute));
             }
             // store game:
             try {

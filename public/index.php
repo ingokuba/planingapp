@@ -9,8 +9,6 @@ spl_autoload_register("autoload");
 
 $database = new Database();
 
-$controller = new PlaningController($database);
-
 require "views/Page.php";
 
 // get page from request parameter and check if it exists:
@@ -24,5 +22,5 @@ if ($page == "" || ! file_exists("views/$page.php")) {
     require "views/$page.php";
 }
 // display view:
-$view = new $page($controller, $database);
+$view = new $page($database);
 echo $view->output();

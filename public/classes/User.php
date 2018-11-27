@@ -102,7 +102,7 @@ class User extends Entity
     {
         $user = new User($database);
         // get email from cookie:
-        $email = PlaningController::getCookieValue(User::$USER);
+        $email = Util::getCookieValue(User::$USER);
         if (empty($email)) {
             return null;
         }

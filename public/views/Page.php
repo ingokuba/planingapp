@@ -11,13 +11,11 @@ class Page
 
     protected $database;
 
-    protected $controller;
 
     public $user;
 
-    public function __construct(PlaningController $controller, Database $database)
+    public function __construct(Database $database)
     {
-        $this->controller = $controller;
         $this->database = $database;
         // initialize user:
         $this->user = User::getUserFromSession($this->database);

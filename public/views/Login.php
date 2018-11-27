@@ -39,7 +39,7 @@ class Login extends Page
                 User::$EMAIL,
                 User::$PASSWORD
             ) as $attr) {
-                $user->setValue($attr, PlaningController::getPostData($attr));
+                $user->setValue($attr, Util::getPostData($attr));
             }
             // login user:
             $this->error = $user->login();
