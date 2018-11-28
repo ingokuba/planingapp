@@ -32,7 +32,7 @@ class Page
             header("Location: Welcome");
         }
         // image source: https://images.mentalfloss.com/sites/default/files/styles/mf_image_16x9/public/345eyrhfj.png?itok=35gvnyvU&resize=1100x1100
-        return "<div class='row'><button class='btn btn-lg mb-1' data-toggle='tooltip' title='Login' onclick='window.location=\"Login\";'><i class='fas fa-user-lock'></i></button>
+        return "<div class='row mt-3'><button class='btn btn-lg btn-success mb-1' data-toggle='tooltip' title='Login' onclick='window.location=\"Login\";'><i class='fas fa-user-lock'></i></button>
                     <i class='fas fa-arrow-left ml-2 pt-3'> Login here</i>
                 </div>
                 <img src='resources/pokerdogs.png' class='img-fluid row mt-2 mb-3' alt='image not found'>

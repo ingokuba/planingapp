@@ -6,35 +6,90 @@ class PlayGame extends Welcome
 
     protected function getBody(): string
     {
+        if ($this->user == null) {
+            header("Location: /");
+        }
         $thisGameID = Util::getPostData("id");
         $game = new Game($this->database);
         $result = $this->database->select(Game::$GAME, "*", $game->ID . "=$thisGameID");
         $description = $result[Game::$DESCRIPTION];
+        $gameResult = $result[Game::$RESULT];
         // played cards:
-        $this->view = "<h3 class='mt-2 mb-3'>$description</h3>
-                        <table class='table table-hover table-dark'>
+        $this->view = "<div class='container row mb-2'>
+                            <button class='btn btn-lg btn-primary mr-2' data-toggle='tooltip' title='Reload' onclick='location.reload();'>
+                                <i class='fas fa-sync'></i>
+                            </button>
+                            <h3 class='mt-2 mb-3'>$description</h3>
+                        </div>
+                        <table class='table table-striped table-dark'>
                             <thead>
                                 <tr>
-                                    <th>Played cards</th>
+                                    <th>Player</th>
+                                    <th class='text-right'>Played value</th>
                                <tr>
                             </thead>
                             <tbody>";
-
+        $sum = $i = 0;
+        $end = true;
         $result = $this->database->multiSelect(GameInstance::$GAME_INSTANCE, "*", GameInstance::$GAME_ID . "=$thisGameID");
         while ($row = $result->fetch_assoc()) {
-            $playedValue = $row[GameInstance::$PLAYED_VALUE] == null ? "<div class='text-danger'><i class='fas fa-times'></i></div>" : "<div class='text-success font-weight-bold'>" . $row[GameInstance::$PLAYED_VALUE] . "</div>";
+            $playedValue = $row[GameInstance::$PLAYED_VALUE];
+            if ($playedValue != null) {
+                // user played a card
+                $sum += GameInstance::getCardValue($playedValue);
+                $i ++;
+                $playedValueField = "<div class='text-success font-weight-bold'>$playedValue</div>";
+            } else {
+                // user didn't play a card
+                $end = false;
+                $playedValueField = "<div class='text-danger'><i class='fas fa-times'></i></div>";
+            }
             $userID = $row[GameInstance::$USER_ID];
             $user = $this->database->select(User::$USER, "*", "id=$userID");
             $givenName = $user[User::$GIVENNAME];
             $surname = $user[User::$SURNAME];
             $this->view .= "<tr>
                                     <td>$givenName $surname</td>
-                                    <td class='text-right'>$playedValue</td>
+                                    <td class='text-right'>$playedValueField</td>
                                 </tr>";
         }
         $thisUserID = $this->user->getValue("id");
-        $this->view .= "</tbody></table>
-                        <h5 class='mt-2 mb-3'>Pick your card</h5>
+        if ($end) {
+            // Total and average
+            $average = round($sum / $i, 1);
+            if ($gameResult == null) {
+                $endGame = "<script>
+                        function endGame() {
+                            if (confirm(\"Do you really want to end this game?\")) {
+                                $.post(\"EndGame\",
+                                {
+                                    result: $sum,
+                                    gameID: $thisGameID
+                                },
+                                function(data, status) {
+                                    if (data.length > 0) {
+                                        alert(data);
+                                    }
+                                    location.reload();
+                                });
+                            }
+                        }</script>
+                        <button class='btn btn-success text-right' data-toggle='tooltip' title='End game' onclick='endGame()'>
+                            <i class='fas fa-flag-checkered'></i>
+                        </button>";
+            } else {
+                $endGame = "Result";
+            }
+            $this->view .= "<tr class='bg-info font-weight-bold'>
+                                <td>$endGame</td>
+                                <td class='text-right'>&#8721; $sum (&#8960; $average)</td>
+                            </tr>";
+        }
+        $this->view .= "</tbody></table>";
+        if ($gameResult != null) {
+            return parent::getBody();
+        }
+        $this->view .= "<h5 class='font-weight-bold mt-2 mb-3'>Pick your card</h5>
                         <script>
                         function playCard(card) {
                             $.post(\"PlayCard\",
