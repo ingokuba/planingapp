@@ -1,0 +1,5 @@
+database:
+  host: planingdb
+  name: planingdb
+  user: root
+  password: password
