@@ -14,8 +14,7 @@ class Database
 
     function __construct()
     {
-        $config = yaml_parse_file("config.yml");
-        $dbconfig = $config["database"];
+        $dbconfig = Configuration::getNode("database");
         $this->link = mysqli_connect($dbconfig["host"], $dbconfig["user"], $dbconfig["password"], $dbconfig["name"]);
     }
 

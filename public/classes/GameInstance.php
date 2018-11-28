@@ -42,7 +42,7 @@ class GameInstance extends Entity
         $userID = $this->getValue(GameInstance::$USER_ID);
         $gameID = $this->getValue(GameInstance::$GAME_ID);
         $playedValue = $this->getValue(GameInstance::$PLAYED_VALUE);
-        if (! ($playedValue == null || in_array($playedValue, Util::$CARDS))) {
+        if (! ($playedValue == null || in_array($playedValue, Util::getCards()))) {
             // can be null or a valid card
             $message .= "Value '$playedValue' is not a valid Card. ";
         }

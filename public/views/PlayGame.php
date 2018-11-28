@@ -112,8 +112,9 @@ class PlayGame extends Welcome
         // play view:
         $indicators = "";
         $inner = "";
-        for ($i = 0; $i < count(Util::$CARDS); $i ++) {
-            $card = Util::$CARDS[$i];
+        $cards = Util::getCards();
+        for ($i = 0; $i < count($cards); $i ++) {
+            $card = $cards[$i];
             $active = (Util::compare($card, $thisCard) ? "active" : "");
             $indicators .= "<li data-target='#carouselIndicators' data-slide-to='$i' class='$active' data-toggle='tooltip' title='$card'></li>";
             $inner .= "<div class='carousel-item $active'>
