@@ -9,6 +9,7 @@ class PlayGame extends Welcome
         if ($this->user == null) {
             header("Location: /");
         }
+        $thisUserID = $this->user->getValue("id");
         $thisGameID = Util::getPostData("id");
         $game = new Game($this->database);
         $result = $this->database->select(Game::$GAME, "*", $game->ID . "=$thisGameID");
@@ -39,6 +40,10 @@ class PlayGame extends Welcome
                 $sum += GameInstance::getCardValue($playedValue);
                 $i ++;
                 $playedValueField = "<div class='text-success font-weight-bold'>$playedValue</div>";
+                if ($row[GameInstance::$USER_ID] == $thisUserID) {
+                    // remember this users playedValue
+                    $thisCard = $playedValue;
+                }
             } else {
                 // user didn't play a card
                 $end = false;
@@ -53,7 +58,6 @@ class PlayGame extends Welcome
                                     <td class='text-right'>$playedValueField</td>
                                 </tr>";
         }
-        $thisUserID = $this->user->getValue("id");
         if ($end) {
             // Total and average
             $average = round($sum / $i, 1);
@@ -110,9 +114,10 @@ class PlayGame extends Welcome
         $inner = "";
         for ($i = 0; $i < count(Util::$CARDS); $i ++) {
             $card = Util::$CARDS[$i];
-            $indicators .= "<li data-target='#carouselIndicators' data-slide-to='$i' " . ($i == 0 ? "class='active'" : "") . "
-                            data-toggle='tooltip' title='$card'></li>";
-            $inner .= "<div class='carousel-item" . ($i == 0 ? " active" : "") . "'>
+            $active = ($card == $thisCard ? "class='active'" : "");
+            $indicators .= "<li data-target='#carouselIndicators' data-slide-to='$i' $active data-toggle='tooltip' title='$card'></li>";
+            $active = ($card == $thisCard ? "active" : "");
+            $inner .= "<div class='carousel-item $active'>
                             <div class='d-block w-100 text-center' onclick='playCard(\"$card\")'>                                
                                 <img class='w-25 mt-3 mb-5' src='resources/card.png' width='50%' alt='Card $card'>
                                 <div class='h1 text-white' style='position: absolute; top: 45%; left: 0; width: 100%;'>$card</div>
