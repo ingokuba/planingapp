@@ -14,7 +14,9 @@ class Database
 
     function __construct()
     {
-        $this->link = mysqli_connect("planingdb", "root", "password", "planingdb");
+        $config = yaml_parse_file("config.yml");
+        $dbconfig = $config["database"];
+        $this->link = mysqli_connect($dbconfig["host"], $dbconfig["user"], $dbconfig["password"], $dbconfig["name"]);
     }
 
     /**
