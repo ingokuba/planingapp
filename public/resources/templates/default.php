@@ -16,7 +16,7 @@
 <link rel="stylesheet"
 	href="https://use.fontawesome.com/releases/v5.5.0/css/all.css">
 </head>
-<body class="container jumbotron vertical-center">
+<body class="container">
   	<?php echo $body;?>
 </body>
 </html>

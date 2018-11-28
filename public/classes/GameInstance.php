@@ -63,5 +63,20 @@ class GameInstance extends Entity
         }
         return $message;
     }
+
+    /**
+     * Determines the numeric value of a card.
+     *
+     * @param mixed $value
+     *            String or numeric value of the card.
+     * @return number The value of the card or null if not a number/null.
+     */
+    public static function getCardValue($value)
+    {
+        if ($value != null && is_numeric($value)) {
+            return $value;
+        }
+        return 0;
+    }
 }
 

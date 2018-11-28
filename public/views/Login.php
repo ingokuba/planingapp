@@ -10,7 +10,7 @@ class Login extends Page
         User::logout();
         $this->handlePost();
         return "<form method='post'
-		style='max-width: 330px; margin: auto;'>
+		style='max-width: 330px;' class='jumbotron vertical-center mx-auto'>
 		<h3 class='mb-3 font-weight-normal form-text'>Login</h3>
 			<div class='form-group row'>
 				<input id='email' class='form-control col-sm'

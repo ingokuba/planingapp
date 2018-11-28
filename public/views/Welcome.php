@@ -22,8 +22,8 @@ class Welcome extends Page
 			         </div>
 		          </div>
 	            </nav>
-                <div class='row'>
-                    <button class='btn btn-lg mb-1' data-toggle='tooltip' title='Logout' onclick='document.cookie=\"User=; expires=new Date(); path=/;\";window.location=\"/\";'><i class='fas fa-sign-out-alt'></i></button>
+                <div class='container row mt-3 mb-3'>
+                    <button class='btn btn-lg btn-danger' data-toggle='tooltip' title='Logout' onclick='document.cookie=\"User=; expires=new Date(); path=/;\";window.location=\"/\";'><i class='fas fa-sign-out-alt'></i></button>
                     <div class='ml-2 pt-3'>Welcome <b>$givenname $surname</b> (Member since $createdAt)</div>
                 </div>
                $this->view";
@@ -48,6 +48,11 @@ class Welcome extends Page
                                     });
                                 }
                             }
+                            function playGame(gameID) {
+                                form = $(\"<form method='post' action='PlayGame'><input type='hidden' value='\" + gameID + \"' name='id'/></form>\");
+                                $(document.body).append(form);
+                                form.submit();
+                            }
                             </script>
                             <h3 class='mt-2 mb-3'>Your games:</h3>
                             <table class='table table-hover table-dark'>
@@ -65,9 +70,15 @@ class Welcome extends Page
                 $gameID = $instance[GameInstance::$GAME_ID];
                 $game = $this->database->select(Game::$GAME, "*", "id=" . $gameID);
                 $createdAt = date("d.m.Y h:ia", $game[Game::$CREATED_AT]);
-                $result = $game[Game::$RESULT] == null ? "<form method='post' action='PlayGame'><input type='hidden' value='$gameID' name='id'/><button class='btn btn-primary' type='submit'>Play</button></form>" : $game[Game::$RESULT];
-                $action = $game[Game::$RESULT] == null ? "<button class='btn btn-success' 
-                    onclick='promptPlayer($gameID)' data-toggle='tooltip' title='Invite'><i class='fas fa-plus-square'></i></button>" : "";
+                $result = $game[Game::$RESULT] == null ? 
+                // Play game:
+                "<button class='btn btn-primary' onclick='playGame($gameID)' data-toggle='tooltip' title='Play'>
+                                                            <i class='fas fa-play'></i>
+                                                        </button>" : 
+                // View game:
+                $game[Game::$RESULT] . "<i class='fas fa-eye ml-1' onclick='playGame($gameID)' data-toggle='tooltip' title='View'></i>";
+                $action = "<button class='btn btn-success' 
+                    onclick='promptPlayer($gameID)' data-toggle='tooltip' title='Invite'><i class='fas fa-plus-square'></i></button>";
                 $this->view .= "<tr>
                                     <td>" . $game[Game::$DESCRIPTION] . "</td>
                                     <td>$createdAt</td>

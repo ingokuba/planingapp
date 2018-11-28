@@ -21,7 +21,7 @@ final class PlayCard extends Page
     }
 
     /**
-     * Creates a new game instance for the invited user.
+     * Sets the played value of the referenced game instance.
      */
     private function handlePost(string $card, int $gameID, int $userID): string
     {

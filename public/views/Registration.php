@@ -10,7 +10,7 @@ class Registration extends Page
         User::logout();
         $this->handlePost();
         return "<form method='post'
-		style='max-width: 330px; margin: auto;'>
+		style='max-width: 330px;' class='jumbotron vertical-center mx-auto'>
 		<h3 class='mb-3 font-weight-normal form-text'>Registration</h3>
 			<div class='form-group row'>
 				<input id='givenName' class='form-control col-sm-6' placeholder='First name' required='required' name='givenName'>
