@@ -1,4 +1,4 @@
-use planingdb;
+use planningdb;
 
 DELIMITER $$
 

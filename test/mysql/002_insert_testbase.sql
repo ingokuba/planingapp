@@ -1,4 +1,4 @@
-USE planingdb;
+USE planningdb;
 
 INSERT INTO User (givenName, surname, email, password)
 VALUES ('Tim', 'Buktu', 'mail@test.com', 'test');

@@ -1,8 +1,8 @@
 version: '3'
 services:
-  planingdb:
-    image: planingdb
-    container_name: planingdb
+  planningdb:
+    image: planningdb
+    container_name: planningdb
     command: --default-authentication-plugin=mysql_native_password
     build:
       context: .
@@ -11,9 +11,9 @@ services:
     - 13306:3306
     environment:
       MYSQL_ROOT_PASSWORD: password
-  planingapp:
-    image: planingapp
-    container_name: planingapp
+  planningapp:
+    image: planningapp
+    container_name: planningapp
     build:
       context: .
       dockerfile: .docker/php/Dockerfile
