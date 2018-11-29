@@ -77,8 +77,8 @@ class Welcome extends Page
                                                         </button>" : 
                 // View game:
                 $game[Game::$RESULT] . "<i class='fas fa-eye ml-1' onclick='playGame($gameID)' data-toggle='tooltip' title='View'></i>";
-                $action = "<button class='btn btn-success' 
-                    onclick='promptPlayer($gameID)' data-toggle='tooltip' title='Invite'><i class='fas fa-plus-square'></i></button>";
+                $action = $game[Game::$RESULT] == null ? "<button class='btn btn-success' 
+                    onclick='promptPlayer($gameID)' data-toggle='tooltip' title='Invite'><i class='fas fa-plus-square'></i></button>" : "";
                 $this->view .= "<tr>
                                     <td>" . $game[Game::$DESCRIPTION] . "</td>
                                     <td>$createdAt</td>
