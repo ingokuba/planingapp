@@ -1,8 +1,17 @@
 <?php
 
+/**
+ * Login form to login a user to the session.
+ */
 class Login extends Page
 {
 
+    /**
+     * Error message that should be displayed when something failed
+     * or invalid input was submitted.
+     *
+     * @var string
+     */
     private $error = "";
 
     protected function getBody(): string

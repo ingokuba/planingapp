@@ -1,11 +1,16 @@
 <?php
 
 /**
- * View without content.
+ * Contentless POST handler to create a game instance for the invited player.
  */
 class InvitePlayer extends Page
 {
 
+    /**
+     * Handles the post request and builds resulting error message.
+     *
+     * @return string Error message or empty string.
+     */
     public function output(): string
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -14,6 +19,8 @@ class InvitePlayer extends Page
             if ($email != null && $gameID != null) {
                 return $this->handlePost($email, $gameID);
             }
+        } else {
+            header("Location: /");
         }
     }
 

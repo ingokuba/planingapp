@@ -1,11 +1,16 @@
 <?php
 
 /**
- * View without content.
+ * Contentless POST handler to update the result of a game.
  */
 final class EndGame extends Page
 {
 
+    /**
+     * Handles the post request and builds resulting error message.
+     *
+     * @return string Error message or empty string.
+     */
     public function output(): string
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -15,7 +20,7 @@ final class EndGame extends Page
                 return $this->handlePost($gameID, $result);
             }
         } else {
-            return "Only post requests allowed.";
+            header("Location: /");
         }
     }
 

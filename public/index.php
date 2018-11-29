@@ -12,7 +12,7 @@ $database = new Database();
 require "views/Page.php";
 
 // get page from request parameter and check if it exists:
-$url =  htmlspecialchars($_SERVER["REQUEST_URI"]);
+$url = htmlspecialchars($_SERVER["REQUEST_URI"]);
 $page = trim($url);
 $page = str_replace("/", "", $page);
 if ($page == "" || ! file_exists("views/$page.php")) {
@@ -24,3 +24,4 @@ if ($page == "" || ! file_exists("views/$page.php")) {
 // display view:
 $view = new $page($database);
 echo $view->output();
+?>

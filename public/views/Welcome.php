@@ -1,8 +1,18 @@
 <?php
 
+/**
+ * Default start page for a logged in context.
+ * Redirects to index page when user cannot be found in the session 
+ * or user in the session cannot be found in the database.
+ */
 class Welcome extends Page
 {
 
+    /**
+     * Content underneath the navbar and logout row.
+     *
+     * @var string|null
+     */
     protected $view;
 
     protected function getBody(): string
@@ -29,6 +39,9 @@ class Welcome extends Page
                $this->view";
     }
 
+    /**
+     * Initializes the views content with an overview table of all games if not otherwise initialized.
+     */
     private function initView(): void
     {
         if ($this->view == null) {

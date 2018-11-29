@@ -1,8 +1,17 @@
 <?php
 
+/**
+ * 
+ * Component to access the applications database.
+ */
 class Database
 {
 
+    /**
+     * mysqli database link
+     *
+     * @var mysqli
+     */
     private $link;
 
     /**

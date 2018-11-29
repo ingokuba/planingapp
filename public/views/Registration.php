@@ -1,8 +1,17 @@
 <?php
 
+/**
+ * Registration form to register a new user and store it in the database.
+ */
 class Registration extends Page
 {
 
+    /**
+     * Error message that should be displayed when something failed
+     * or invalid input was submitted.
+     *
+     * @var string
+     */
     private $error = "";
 
     protected function getBody(): string
@@ -32,7 +41,7 @@ class Registration extends Page
     }
 
     /**
-     * Register the new user with the entered credentials.
+     * Register the new user with the entered credentials and log it in to the session.
      */
     private function handlePost()
     {

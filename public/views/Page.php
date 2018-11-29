@@ -2,18 +2,29 @@
 
 /**
  * Default index page of the application. 
- * Parent class for all different pages.
+ * Parent class for all other views.
  * 
- * @author Ingo Kuba
  */
 class Page
 {
 
+    /**
+     * Database connection.
+     *
+     * @var Database
+     */
     protected $database;
 
-
+    /**
+     * Logged in user.
+     *
+     * @var User
+     */
     public $user;
 
+    /**
+     * Sets the database connection and retrieves the user from the session cookie.
+     */
     public function __construct(Database $database)
     {
         $this->database = $database;
@@ -22,7 +33,7 @@ class Page
     }
 
     /**
-     * Override this function to initialize the content of the page.
+     * Initializes the content of the page.
      *
      * @return string Body for the page.
      */
@@ -39,6 +50,11 @@ class Page
                 <h1 class='text-center'>Cost estimation game for software projects.</h1>";
     }
 
+    /**
+     * Builds the page with the body content.
+     *
+     * @return string The html for the page.
+     */
     public function output(): string
     {
         $body = $this->getBody();

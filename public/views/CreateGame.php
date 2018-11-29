@@ -1,10 +1,18 @@
 <?php
 require 'views/Welcome.php';
 
+/**
+ * View with input form to create a new game entity and instance for the logged in user.
+ */
 class CreateGame extends Welcome
 {
 
-    private $error;
+    /**
+     * Error message that should be displayed when something failed.
+     *
+     * @var string
+     */
+    private $error = "";
 
     protected function getBody(): string
     {
@@ -28,6 +36,9 @@ class CreateGame extends Welcome
         return parent::getBody();
     }
 
+    /**
+     * Retrieves game attributes from the request parameters and creates the game and instance with them.
+     */
     private function handlePost()
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -57,7 +68,7 @@ class CreateGame extends Welcome
                 $this->error .= $e->getMessage();
             }
             if (empty($this->error)) {
-                header("Location: Welcome");
+                header("Location: /");
             }
         }
     }
