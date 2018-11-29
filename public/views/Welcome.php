@@ -14,10 +14,10 @@ class Welcome extends Page
         $surname = $this->user->getValue(User::$SURNAME);
         $createdAt = date("d.m.Y", strtotime($this->user->getValue(User::$CREATED_AT)));
         $this->initView();
-        return "<nav class='navbar navbar-expand-lg navbar-dark bg-dark'>
+        return "<nav class='navbar navbar-expand navbar-dark bg-dark'>
 		          <div class='collapse navbar-collapse' id='navbarNavAltMarkup'>
 			         <div class='navbar-nav'>
-				        <a class='nav-item nav-link active' href='/'>Home</a>
+				        <a class='nav-item nav-link active' href='/'>Overview</a>
 				        <a class='nav-item nav-link' href='CreateGame'>New game</a>
 			         </div>
 		          </div>
