@@ -77,4 +77,22 @@ class Util
         $string = stripslashes($string);
         return htmlspecialchars($string);
     }
+
+    /**
+     * Checks whether two variables have the same value.
+     *
+     * @param number|string $var1
+     * @param number|string $var2
+     * @return bool If both variables have the same value.
+     */
+    public static function compare($var1, $var2): bool
+    {
+        if (is_numeric($var1) && is_numeric($var2)) {
+            return $var1 == $var2;
+        }
+        if (is_string($var1) && is_string($var2)) {
+            return $var1 === $var2;
+        }
+        return false;
+    }
 }

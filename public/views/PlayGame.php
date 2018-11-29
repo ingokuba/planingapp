@@ -114,9 +114,8 @@ class PlayGame extends Welcome
         $inner = "";
         for ($i = 0; $i < count(Util::$CARDS); $i ++) {
             $card = Util::$CARDS[$i];
-            $active = ($card == $thisCard ? "class='active'" : "");
-            $indicators .= "<li data-target='#carouselIndicators' data-slide-to='$i' $active data-toggle='tooltip' title='$card'></li>";
-            $active = ($card == $thisCard ? "active" : "");
+            $active = (Util::compare($card, $thisCard) ? "active" : "");
+            $indicators .= "<li data-target='#carouselIndicators' data-slide-to='$i' class='$active' data-toggle='tooltip' title='$card'></li>";
             $inner .= "<div class='carousel-item $active'>
                             <div class='d-block w-100 text-center' onclick='playCard(\"$card\")'>                                
                                 <img class='w-25 mt-3 mb-5' src='resources/card.png' width='50%' alt='Card $card'>
