@@ -64,7 +64,7 @@ class Registration extends Page
             }
             if (empty($this->error)) {
                 // login user to the session
-                $this->error = $user->login();
+                $this->error = $user->setLoginCookie();
             }
         }
     }

@@ -94,4 +94,16 @@ class Util
         }
         return false;
     }
+
+    /**
+     * Encrypts a password with the blowfish encryption algorithm.
+     *
+     * @param string $password
+     *            The plaintext password.
+     * @return string Hashed password.
+     */
+    public static function hashPassword(string $password): string
+    {
+        return password_hash($password, PASSWORD_BCRYPT);
+    }
 }

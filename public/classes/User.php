@@ -95,6 +95,16 @@ class User extends Entity
     }
 
     /**
+     * Hash the password before storing the entity.
+     */
+    public function store(): string
+    {
+        $password = $this->getValue(User::$PASSWORD);
+        $this->setValue(User::$PASSWORD, Util::hashPassword($password));
+        return parent::store();
+    }
+
+    /**
      * Login the user to the session.
      *
      * @return string Error message.
@@ -107,13 +117,21 @@ class User extends Entity
             return "Please enter your credentials.";
         }
         $result = $this->database->select(User::$USER, "*", User::$EMAIL . "='$email'");
-        if ($result != null && $result[User::$PASSWORD] == $password) {
-            // Cookie lifespan: 30 minutes
-            setcookie(User::$USER, "$email", time() + 1800, "/");
-            header("Location: /");
+        if ($result != null && password_verify($password, $result[User::$PASSWORD])) {
+            $this->setLoginCookie();
             return "";
         }
         return "Invalid credentials.";
+    }
+
+    /**
+     * Set login cookie in the session.
+     */
+    public function setLoginCookie(): void
+    {
+        $email = $this->getValue(User::$EMAIL);
+        setcookie(User::$USER, "$email", time() + 1800, "/");
+        header("Location: /");
     }
 
     /**
