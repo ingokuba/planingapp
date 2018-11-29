@@ -67,7 +67,8 @@ class Game extends Entity
             Game::$MAX_PARTICIPANTS
         ));
         if ($this->getValue(Game::$MAX_PARTICIPANTS) < 1) {
-            return $message . "Value must at least be 1.";
+            $message .= "Value must at least be 1.";
         }
+        return $message;
     }
 }
