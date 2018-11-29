@@ -1,8 +1,18 @@
 <?php
 
+/**
+ * 
+ * Utility class for various static helper methods.
+ *
+ */
 class Util
 {
 
+    /**
+     * Overrides default constructor to prevent instanciation.
+     *
+     * @throws BadFunctionCallException When constructor is called.
+     */
     public function __construct()
     {
         throw new BadFunctionCallException("This utility class cannot be instanciated.");

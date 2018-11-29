@@ -4,20 +4,36 @@ class User extends Entity
 {
 
     /**
-     * Entity type 'User'.
+     * Entity type/table name.
      *
      * @var string
      */
     public static $USER = "User";
 
+    /**
+     * The first name of the person.
+     */
     public static $GIVENNAME = "givenName";
 
+    /**
+     * The last name of the person.
+     */
     public static $SURNAME = "surname";
 
+    /**
+     * The <b>unique</b> email and login of the user.
+     */
     public static $EMAIL = "email";
 
+    /**
+     * The login password of the user.
+     */
     public static $PASSWORD = "password";
 
+    /**
+     * Create timestamp.
+     * Read only.
+     */
     public static $CREATED_AT = "createdAt";
 
     protected function initializeEntityType(): string
@@ -36,6 +52,27 @@ class User extends Entity
         );
     }
 
+    /**
+     * Constraints:
+     * <ul>
+     * <li>givenName
+     * <ul>
+     * <li>notnullable
+     * </ul>
+     * <li>surname
+     * <ul>
+     * <li>notnullable
+     * </ul>
+     * <li>email
+     * <ul>
+     * <li>notnullable
+     * <li>unique
+     * </ul>
+     * <li>password
+     * <ul>
+     * <li>notnullable
+     * </ul>
+     */
     protected function checkConstraints(): string
     {
         $message = $this->isEmpty(array(

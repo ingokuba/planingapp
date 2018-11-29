@@ -1,11 +1,16 @@
 <?php
 
 /**
- * View without content.
+ * Contentless POST handler to update the played card of a game instance.
  */
 final class PlayCard extends Page
 {
 
+    /**
+     * Handles the post request and builds resulting error message.
+     *
+     * @return string Error message or empty string.
+     */
     public function output(): string
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -16,7 +21,7 @@ final class PlayCard extends Page
                 return $this->handlePost($card, $gameID, $userID);
             }
         } else {
-            return "Only post requests allowed.";
+            header("Location: /");
         }
     }
 

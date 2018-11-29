@@ -1,6 +1,9 @@
 <?php
 require 'views/Welcome.php';
 
+/**
+ * Main view containing the game logic.
+ */
 class PlayGame extends Welcome
 {
 

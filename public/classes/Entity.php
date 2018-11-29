@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Abstract parent class for all database entities.
+ *
+ */
 abstract class Entity
 {
 
@@ -41,7 +45,7 @@ abstract class Entity
     }
 
     /**
-     * Implement this function to initialize the entity type.
+     * Initialize the entity type.
      * Important: must be the name of the table.
      *
      * @return string Entity type/table name.
@@ -49,26 +53,40 @@ abstract class Entity
     protected abstract function initializeEntityType(): string;
 
     /**
-     * Implement this function to initialize the attributes of the new entity.
-     * Important: the first value should be the id.
+     * Initialize the attributes of the new entity.
      *
      * @return array Attribute map.
      */
     protected abstract function initializeAttributes(): array;
 
     /**
-     * Implement this function to create constraints on attributes.
+     * Create constraints on attributes.
      *
      * @return string Error message or empty string if no constraint was matched.
      */
     protected abstract function checkConstraints(): string;
 
+    /**
+     * Get a value from the attributes.
+     *
+     * @param string $attr
+     *            Name of the attribute.
+     * @return mixed Value from the attribute map.
+     */
     public function getValue(string $attr)
     {
         $this->checkAttribute($attr);
         return $this->attributes[$attr];
     }
 
+    /**
+     * Set an attribute value.
+     *
+     * @param string $attr
+     *            Name of the attribute.
+     * @param mixed $value
+     *            The value to set.
+     */
     public function setValue(string $attr, $value)
     {
         $this->checkAttribute($attr);
