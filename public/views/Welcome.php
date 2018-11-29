@@ -34,19 +34,21 @@ class Welcome extends Page
         if ($this->view == null) {
             $this->view = "<script>
                             function promptPlayer(gameID) {
-                                var user = prompt(\"Please enter email\");
-                                if (user != null) {
-                                    $.post(\"InvitePlayer\",
-                                    {
-                                        email: user,
-                                        gameID: gameID
-                                    },
-                                    function(data, status) {
-                                        if (data.length > 0) {
-                                            alert(data);
+                                bootbox.prompt(\"Please enter email\",
+                                    function(user) {
+                                        if (user != null && user != \"\") {
+                                            $.post(\"InvitePlayer\",
+                                            {
+                                                email: user,
+                                                gameID: gameID
+                                            },
+                                            function(data, status) {
+                                                if (data.length > 0) {
+                                                    bootbox.alert(data);
+                                                }
+                                            });
                                         }
                                     });
-                                }
                             }
                             function playGame(gameID) {
                                 form = $(\"<form method='post' action='PlayGame'><input type='hidden' value='\" + gameID + \"' name='id'/></form>\");

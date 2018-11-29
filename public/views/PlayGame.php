@@ -72,7 +72,7 @@ class PlayGame extends Welcome
                                 },
                                 function(data, status) {
                                     if (data.length > 0) {
-                                        alert(data);
+                                        bootbox.alert(data);
                                     }
                                     location.reload();
                                 });
@@ -104,7 +104,7 @@ class PlayGame extends Welcome
                                 },
                                 function(data, status) {
                                     if (data.length > 0) {
-                                        alert(data);
+                                        bootbox.alert(data);
                                     }
                                     location.reload();
                             });
