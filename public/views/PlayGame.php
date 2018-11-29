@@ -67,7 +67,7 @@ class PlayGame extends Welcome
             if ($gameResult == null) {
                 $endGame = "<script>
                         function endGame() {
-                            if (confirm(\"Do you really want to end this game?\")) {
+                            bootbox.confirm(\"Do you really want to end this game?\", function(result) {
                                 $.post(\"EndGame\",
                                 {
                                     result: $sum,
@@ -79,7 +79,7 @@ class PlayGame extends Welcome
                                     }
                                     location.reload();
                                 });
-                            }
+                            });
                         }</script>
                         <button class='btn btn-success text-right' data-toggle='tooltip' title='End game' onclick='endGame()'>
                             <i class='fas fa-flag-checkered'></i>
