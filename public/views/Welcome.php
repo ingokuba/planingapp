@@ -14,10 +14,10 @@ class Welcome extends Page
         $surname = $this->user->getValue(User::$SURNAME);
         $createdAt = date("d.m.Y", strtotime($this->user->getValue(User::$CREATED_AT)));
         $this->initView();
-        return "<nav class='navbar navbar-expand-lg navbar-dark bg-dark'>
+        return "<nav class='navbar navbar-expand navbar-dark bg-dark'>
 		          <div class='collapse navbar-collapse' id='navbarNavAltMarkup'>
 			         <div class='navbar-nav'>
-				        <a class='nav-item nav-link active' href='/'>Home</a>
+				        <a class='nav-item nav-link active' href='/'>Overview</a>
 				        <a class='nav-item nav-link' href='CreateGame'>New game</a>
 			         </div>
 		          </div>
@@ -34,19 +34,21 @@ class Welcome extends Page
         if ($this->view == null) {
             $this->view = "<script>
                             function promptPlayer(gameID) {
-                                var user = prompt(\"Please enter email\");
-                                if (user != null) {
-                                    $.post(\"InvitePlayer\",
-                                    {
-                                        email: user,
-                                        gameID: gameID
-                                    },
-                                    function(data, status) {
-                                        if (data.length > 0) {
-                                            alert(data);
+                                bootbox.prompt(\"Please enter email\",
+                                    function(user) {
+                                        if (user != null && user != \"\") {
+                                            $.post(\"InvitePlayer\",
+                                            {
+                                                email: user,
+                                                gameID: gameID
+                                            },
+                                            function(data, status) {
+                                                if (data.length > 0) {
+                                                    bootbox.alert(data);
+                                                }
+                                            });
                                         }
                                     });
-                                }
                             }
                             function playGame(gameID) {
                                 form = $(\"<form method='post' action='PlayGame'><input type='hidden' value='\" + gameID + \"' name='id'/></form>\");
@@ -77,8 +79,8 @@ class Welcome extends Page
                                                         </button>" : 
                 // View game:
                 $game[Game::$RESULT] . "<i class='fas fa-eye ml-1' onclick='playGame($gameID)' data-toggle='tooltip' title='View'></i>";
-                $action = "<button class='btn btn-success' 
-                    onclick='promptPlayer($gameID)' data-toggle='tooltip' title='Invite'><i class='fas fa-plus-square'></i></button>";
+                $action = $game[Game::$RESULT] == null ? "<button class='btn btn-success' 
+                    onclick='promptPlayer($gameID)' data-toggle='tooltip' title='Invite'><i class='fas fa-plus-square'></i></button>" : "";
                 $this->view .= "<tr>
                                     <td>" . $game[Game::$DESCRIPTION] . "</td>
                                     <td>$createdAt</td>
