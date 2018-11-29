@@ -1,6 +1,6 @@
 database:
-  host: planingdb
-  name: planingdb
+  host: planningdb
+  name: planningdb
   user: root
   password: password
 cards:

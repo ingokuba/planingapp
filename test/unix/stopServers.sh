@@ -1,3 +1,3 @@
 #!/bin/bash
-docker-compose -p planingapp -f docker-compose.yml down -v
+docker-compose -p planningapp -f docker-compose.yml down -v
 echo 'done'
