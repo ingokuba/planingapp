@@ -3,30 +3,19 @@
 class Util
 {
 
-    /**
-     * Valid cards for the game.
-     *
-     * @var array
-     */
-    public static $CARDS = array(
-        0,
-        0.5,
-        1,
-        2,
-        3,
-        5,
-        8,
-        13,
-        20,
-        40,
-        100,
-        '?',
-        'Coffee'
-    );
-
     public function __construct()
     {
         throw new BadFunctionCallException("This utility class cannot be instanciated.");
+    }
+
+    /**
+     * Get array of valid cards from the configuration.
+     *
+     * @return array Valid cards (numeric/string).
+     */
+    public static function getCards(): array
+    {
+        return Configuration::getNode("cards");
     }
 
     /**
