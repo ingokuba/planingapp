@@ -3,6 +3,7 @@ services:
   planingdb:
     image: planingdb
     container_name: planingdb
+    command: --default-authentication-plugin=mysql_native_password
     build:
       context: .
       dockerfile: .docker/mysql/Dockerfile
