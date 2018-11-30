@@ -14,7 +14,7 @@ Execute <a href="test/windows/startServers.cmd">`test/windows/startServers.cmd`<
 ### Without docker
 The application needs a MySQL database which is compatible to the PHP extension `mysqli` (see related blogpost <a href="https://mysqlserverteam.com/upgrading-to-mysql-8-0-default-authentication-plugin-considerations/">here</a>).
 The connection parameters for the database can be configured in <a href="public/config.yml">`public/config.yml`</a>.
-To create the database and the tables run <a href="test/mysql/000_create_database.sql">`test/mysql/000_create_database.sql`</a> on your database (optionally, the other sql files can also be run to create triggers and some mock data).
+To create the database and the tables run <a href="test/mysql/000_create_database.sql">`test/mysql/000_create_database.sql`</a> on your database.
 <br/>
 Then, simply publish the content of the `public/` folder to your Server and start testing.
 

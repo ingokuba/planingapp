@@ -24,6 +24,28 @@ class Database
     function __construct()
     {
         $dbconfig = Configuration::getNode("database");
+        $this->connect($dbconfig);
+        // ping the database to find out whether the connection is stable.
+        $start = microtime(true);
+        while (! $this->link || ! $this->link->ping()) {
+            sleep(1);
+            $current = microtime(true);
+            $exec_time = $current - $start;
+            if ($exec_time > 30) {
+                throw new mysqli_sql_exception("Cannot establish database connection.");
+            }
+            $this->connect($dbconfig);
+        }
+    }
+
+    /**
+     * Connect to the database.
+     *
+     * @param array $dbconfig
+     *            Associative array of config parameters.
+     */
+    public function connect(array $dbconfig): void
+    {
         $this->link = mysqli_connect($dbconfig["host"], $dbconfig["user"], $dbconfig["password"], $dbconfig["name"]);
     }
 
