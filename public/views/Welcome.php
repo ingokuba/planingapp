@@ -33,7 +33,7 @@ class Welcome extends Page
 		          </div>
 	            </nav>
                 <div class='container row mt-3 mb-3'>
-                    <button class='btn btn-lg btn-danger' data-toggle='tooltip' title='Logout' onclick='document.cookie=\"User=; expires=new Date(); path=/;\";window.location=\"/\";'><i class='fas fa-sign-out-alt'></i></button>
+                    <button class='btn btn-lg btn-danger' data-toggle='tooltip' title='Logout' onclick='window.location=\"Login\";'><i class='fas fa-sign-out-alt'></i></button>
                     <div class='ml-2 pt-3'>Welcome <b>$givenname $surname</b> (Member since $createdAt)</div>
                 </div>
                $this->view";

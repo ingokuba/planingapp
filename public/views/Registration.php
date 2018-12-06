@@ -16,10 +16,13 @@ class Registration extends Page
 
     protected function getBody(): string
     {
-        User::logout();
+        if ($this->user != null) {
+            $this->user->logout();
+        }
         $this->handlePost();
         return "<form method='post'
 		style='max-width: 330px;' class='jumbotron vertical-center mx-auto'>
+        <a href='/' data-toggle='tooltip' title='Home'><i class='fas fa-3x fa-home'></i></a>
 		<h3 class='mb-3 font-weight-normal form-text'>Registration</h3>
 			<div class='form-group row'>
 				<input id='givenName' class='form-control col-sm-6' placeholder='First name' required='required' name='givenName'>
@@ -64,7 +67,7 @@ class Registration extends Page
             }
             if (empty($this->error)) {
                 // login user to the session
-                $this->error = $user->setLoginCookie();
+                $this->error = $user->login(false);
             }
         }
     }
