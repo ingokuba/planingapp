@@ -16,10 +16,13 @@ class Login extends Page
 
     protected function getBody(): string
     {
-        User::logout();
+        if ($this->user != null) {
+            $this->user->logout();
+        }
         $this->handlePost();
         return "<form method='post'
 		style='max-width: 330px;' class='jumbotron vertical-center mx-auto'>
+        <a href='/' data-toggle='tooltip' title='Home'><i class='fas fa-3x fa-home'></i></a>
 		<h3 class='mb-3 font-weight-normal form-text'>Login</h3>
 			<div class='form-group row'>
 				<input id='email' class='form-control col-sm'
@@ -51,7 +54,7 @@ class Login extends Page
                 $user->setValue($attr, Util::getPostData($attr));
             }
             // login user:
-            $this->error = $user->login();
+            $this->error = $user->login(true);
         }
     }
 }

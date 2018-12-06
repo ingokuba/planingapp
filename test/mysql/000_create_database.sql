@@ -9,6 +9,7 @@ surname varchar(512) NOT NULL,
 email varchar(254) NOT NULL UNIQUE,
 password varchar(254) NOT NULL,
 createdAt timestamp DEFAULT CURRENT_TIMESTAMP,
+token varchar(254) UNIQUE,
 PRIMARY KEY (id)
 )ENGINE=InnoDB;
 
