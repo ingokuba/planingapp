@@ -77,7 +77,9 @@ class PlayGame extends Welcome
                                     if (data.length > 0) {
                                         bootbox.alert(data);
                                     }
-                                    location.reload();
+                                    setTimeout(function(){
+                                        location.reload();
+                                    }, 2000);
                                 });
                             });
                         }</script>
