@@ -30,6 +30,12 @@ final class PlayCard extends Page
      */
     private function handlePost(string $card, int $gameID, int $userID): string
     {
+        $result = $this->database->select(Game::$GAME, "*", "id=$gameID");
+        if ($result == null) {
+            return "Game doesn't exist.";
+        } else if ($result[Game::$RESULT] != null) {
+            return "Game is already closed.";
+        }
         if (! $this->database->update(GameInstance::$GAME_INSTANCE, GameInstance::$GAME_ID . "=$gameID AND " . GameInstance::$USER_ID . "=$userID", GameInstance::$PLAYED_VALUE . "='$card'")) {
             return "Something went horribly wrong.";
         }
